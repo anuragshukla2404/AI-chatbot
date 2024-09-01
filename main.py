@@ -5,8 +5,6 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.chat_models import ChatOpenAI
-import os
-from dotenv import load_dotenv
 from langchain.chains.question_answering import load_qa_chain
 
 st.set_page_config(page_title="Chatbot", layout="wide")
