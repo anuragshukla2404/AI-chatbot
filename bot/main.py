@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 load_dotenv()
 import os
 
-api_key = os.getenv('OPENAI_API_KEY')
 st.set_page_config(page_title="Chatbot", layout="wide")
 api_key = st.text_input("enter your openai API key",type="password",key="api_key_input")
 
