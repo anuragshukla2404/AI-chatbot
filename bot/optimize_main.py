@@ -9,15 +9,11 @@ from langchain_community.chat_models import ChatOpenAI
 from langchain.chains.question_answering import load_qa_chain
 import dspy
 
-# ColBERTv2 retrieval setup
-
-from dotenv import load_dotenv
-load_dotenv()
 import os
 
 # Set up Streamlit and load API key
 st.set_page_config(page_title="Chatbot", layout="wide")
-api_key = st.text_input("enter your openai API key",type="password",key="api_key_input")
+api_key = os.getenv("OPENAI_API_KEY")
 
 
 # Extract text from PDF files
@@ -41,7 +37,7 @@ def get_vector_store(text_chunks):
     vector_store.save_local("faiss_index")
 
 # Process user input and generate response
-def user_input(user_question,api_key):   
+def user_input(user_question):   
     lm = dspy.LM('openai/gpt-4o-mini',api_key=api_key)
     dspy.configure(lm=lm)
     qa = dspy.Predict('question: str -> response: str')
@@ -53,12 +49,12 @@ def main():
     st.header("Bot App")
     user_question = st.text_input("Ask a question from PDF files", key="user_question")
     if user_question and api_key:
-        user_input(user_question,api_key)
+        user_input(user_question)
 
     with st.sidebar:
         st.title("Menu:")
         pdf_docs = st.file_uploader("Upload your documents", accept_multiple_files=True, key="pdf_uploader")
-        if st.button("Submit & Process", key="process_button") and api_key:
+        if st.button("Submit & Process", key="process_button"):
             with st.spinner("Processing..."):
                 raw_text = get_pdf_text(pdf_docs)
                 text_chunks = get_text_chunks(raw_text)
